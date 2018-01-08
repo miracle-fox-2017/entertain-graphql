@@ -92,12 +92,7 @@ const graphMutation = new GraphQLObjectType({
       },
       resolve: async (root, args) => {
         const { profileParams } = args
-        const newProfile = {
-          firstName: profileParams.firstName,
-          lastName: profileParams.lastName,
-          address: profileParams.address
-        }
-        await Profile.create(newProfile)
+        await Profile.create(profileParams)
         let dataProfile = await Profile.find()
         return dataProfile
       }
