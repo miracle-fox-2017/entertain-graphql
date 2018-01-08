@@ -30,6 +30,9 @@ const {
 const MovieType = new GraphQLObjectType({
   name: 'Movie',
   fields: {
+    _id: {
+      type: GraphQLString,
+    },
     title: {
       type: GraphQLString,
     },
@@ -65,6 +68,30 @@ const MovieInputType = new GraphQLInputObjectType({
   }
 })
 
+const MovieInputUpdateType = new GraphQLInputObjectType({
+  name: 'MovieInputUpdateType',
+  fields: {
+    id: {
+      type: GraphQLString,
+    },
+    overview: {
+      type: GraphQLString,
+    },
+    title: {
+      type: GraphQLString,
+    }
+  }
+})
+
+const MovieInputDeleteType = new GraphQLInputObjectType({
+  name: 'MovieInputDeleteType',
+  fields: {
+    id: {
+      type: GraphQLString,
+    }
+  }
+})
+
 // then, we need the mutation
 const MutationType = new GraphQLObjectType({
   name: 'Mutation',
@@ -93,6 +120,46 @@ const MutationType = new GraphQLObjectType({
         return newMovie;
       }
     },
+    updateMovie: {
+      type: MovieType,
+      args: {
+        input: {
+          name: 'input',
+          type: MovieInputUpdateType,
+        }
+      },
+      resolve: async (root, args) => {
+        const {
+          input
+        } = args;
+
+
+        const editMovie = await movieModel.findById(input.id)
+        editMovie.title = input.title;
+        editMovie.overview = input.overview;
+
+        const editedMovie = await editMovie.save() 
+        return editedMovie
+      }
+    },
+    deleteMovie: {
+      type: MovieType,
+      args: {
+        input: {
+          name: 'input',
+          type: MovieInputDeleteType,
+        }
+      },
+      resolve: async(root, args) => {
+        const {
+          input
+        } = args;
+
+        const deletedMovie = await movieModel.findByIdAndRemove(input.id)
+
+        return deletedMovie;
+      }
+    }
   }
 })
 
