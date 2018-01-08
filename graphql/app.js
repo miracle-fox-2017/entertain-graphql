@@ -115,15 +115,15 @@ const AppMutation = new GraphQLObjectType({
       resolve: async (root, args) => {
         const {editMovie} = args
         const id = editMovie._id
-        await MoviesModel.findByIdAndUpdate(id, {
+        await MoviesModel.update({_id: id}, {
           title: editMovie.title,
           overview: editMovie.overview,
           popularity: editMovie.popularity,
           tag: editMovie.tag,
           poster_path: editMovie.poster_path,
           status: editMovie.status
-        }, {new: true})
-        let dataMovie = await MovieModel.find()
+        })
+        let dataMovie = await MoviesModel.find()
         return dataMovie
       }
     },
