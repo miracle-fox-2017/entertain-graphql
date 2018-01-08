@@ -34,15 +34,6 @@ const UserType = new GraphQLObjectType({
   }
 })
 
-const DataType = new GraphQLObjectType({
-  name: 'Data',
-  fields: {
-    data: {
-      type: UserType
-    }
-  }
-})
-
 const ActionType = new GraphQLObjectType({
   name: 'Action',
   fields: {
