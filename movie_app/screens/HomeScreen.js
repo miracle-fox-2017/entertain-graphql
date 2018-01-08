@@ -9,7 +9,8 @@ import {
   ActivityIndicator, 
   TextInput 
 } from 'react-native';
-
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
 import { StackNavigator } from 'react-navigation';
 import MovieRow from '../components/MovieRow'
 
@@ -32,6 +33,12 @@ class HomeScreen extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      movieList: nextProps.data.movie
+    })
+  }
+
   render() {
     const { navigate } = this.props.navigation
     const styles = StyleSheet.create({
@@ -50,7 +57,6 @@ class HomeScreen extends Component {
 
     return (
       <View style={styles.container}>
-        
         <FlatList
           data={this.state.movieList}
           keyExtractor={(item, index) => 'movie-'+item.id}
@@ -67,4 +73,12 @@ class HomeScreen extends Component {
   }
 }
 
-export default HomeScreen
+export default graphql(gql`
+  query{
+    movie {
+      _id
+      title
+      overview
+    }
+  }
+`)(HomeScreen);

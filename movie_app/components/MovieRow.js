@@ -31,7 +31,7 @@ export default class MovieRow extends Component {
     return (
       <View style={styles.movieItem}>
         <Text style={styles.title}>{movie.title}</Text>
-        <Text style={styles.title}>{movie.overview}</Text>
+        <Text>{movie.overview}</Text>
       </View>
     )
   }
