@@ -185,55 +185,7 @@ app.use('/graphql', graphqlHTTP({
 }))
 
 app.use('/', (req, res) => {
-  res.send('server running !!!')
+  res.send('server running on port 4000!!!')
 })
 
 app.listen(4000, () => console.log('server running on 4000'))
-
-
-// queryQL mutation createUser
-// mutation{
-//   createUser(input: {
-//     name: "semut",
-//     address: "jakarta",
-//     age: 20
-//   })
-//   {
-//     msg
-//     err
-//   }
-// }
-
-// queryQL query
-// query{
-//   user {
-//     name
-//     address
-//     age
-//   }
-// }
-
-//queryQL mutation editUser
-// mutation{
-//   editUser(input: {
-//     _id: "5a53019fbe51e55777834bf9",
-//     name: "lebah ganteng",
-//     address: "jakarta",
-//     age: 20
-//   })
-//   {
-//     msg
-//     err
-//   }
-// }
-
-//queryQL mutation deleteUser
-// mutation{
-//   deleteUser(input: {
-//     _id: "5a5301e94ee7ff57d97f2d49"
-//   })
-//   {
-//     msg
-//     err
-//   }
-// }
