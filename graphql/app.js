@@ -54,6 +54,18 @@ const MovieInputType = new GraphQLInputObjectType({
   }
 })
 
+const MovieEditType = new GraphQLInputObjectType({
+  name: 'MovieEdit',
+  fields: {
+    _id: {type: GraphQLString},
+    title: {type: GraphQLString},
+    overview: {type: GraphQLString},
+    popularity: {type: GraphQLFloat},
+    poster_path: {type: GraphQLString},
+    status: {type: GraphQLString},
+    tag: {type: GraphQLString}
+  }
+})
 
 const MovieDeleteType = new GraphQLInputObjectType({
   name: 'MovieDelete',
@@ -90,6 +102,29 @@ const AppMutation = new GraphQLObjectType({
         await MoviesModel.create(movieParam)
         let movie = await MoviesModel.find()
         return movie
+      }
+    },
+    editMovie: {
+      type: new GraphQLList(MoviesType),
+      args: {
+        editMovie: {
+          name: 'edit movie',
+          type: MovieEditType
+        }
+      },
+      resolve: async (root, args) => {
+        const {editMovie} = args
+        const id = editMovie._id
+        await MoviesModel.findByIdAndUpdate(id, {
+          title: editMovie.title,
+          overview: editMovie.overview,
+          popularity: editMovie.popularity,
+          tag: editMovie.tag,
+          poster_path: editMovie.poster_path,
+          status: editMovie.status
+        }, {new: true})
+        let dataMovie = await MovieModel.find()
+        return dataMovie
       }
     },
     deleteMovie: {
