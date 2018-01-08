@@ -70,6 +70,20 @@ const movieDeleteType = new GraphQLInputObjectType({
   }
 })
 
+//movie edit type
+const movieEditType = new GraphQLInputObjectType({
+  name: 'MovieEdit',
+  fields: {
+    _id: { type: GraphQLString },
+    title: { type: GraphQLString },
+    overview: { type: GraphQLString },
+    poster_path: { type: GraphQLString },
+    popularity: { type: GraphQLInt },
+    status: { type: GraphQLString },
+    tag: {type: GraphQLString }
+  }
+})
+
 //movie mutations
 const movieMutation = new GraphQLObjectType({
   name: 'Mutation',
@@ -97,13 +111,35 @@ const movieMutation = new GraphQLObjectType({
           type: movieDeleteType
         }
       },
-      resolve: (root,args) => {
-        console.log('masuk sini pak');
+      resolve: async(root,args) => {
         const { hapus } = args
-        console.log(hapus);
         const id = hapus._id
-        return Movie.remove({_id: hapus._id})
-        .then(data => Movie.find())
+        await Movie.remove({_id: hapus._id})
+        let movieData = Movie.find()
+        return movieData
+      }
+    },
+    editMovie: {
+      type: new GraphQLList(movieType),
+      args: {
+        edit: {
+          name: 'MovieEdit',
+          type: movieEditType
+        }
+      },
+      resolve: async (root,args) => {
+        const { edit } = args
+        const id = edit._id
+        await Movie.update({_id: id}, {
+          title: edit.title,
+          overview: edit.overview,
+          poster_path: edit.poster_path,
+          popularity: edit.popularity,
+          status: edit.status,
+          tag: edit.tag
+        })
+        let movieData = await Movie.find()
+        return movieData
       }
     }
   }
