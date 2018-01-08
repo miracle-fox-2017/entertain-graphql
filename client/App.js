@@ -14,6 +14,7 @@ import {
   StackNavigator,
 } from 'react-navigation';
 import HomeScreen from './screen/Home'
+import AddUserScreen from './screen/AddUser'
 const query = gql`
 query{
   user {
@@ -27,7 +28,8 @@ query{
 `;
 
 const Apps = StackNavigator({
-  Home: { screen: HomeScreen }
+  Home: { screen: HomeScreen },
+  AddUser: { screen: AddUserScreen }
 });
 
 const client = new ApolloClient({

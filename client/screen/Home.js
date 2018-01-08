@@ -1,8 +1,13 @@
 import React, { Component } from 'react'
-import { StyleSheet, View, Text, FlatList } from 'react-native'
 import { StackNavigator } from 'react-navigation'
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
+import { StyleSheet,
+  View,
+  Text,
+  FlatList,
+  Button
+} from 'react-native'
 
 class Home extends Component {
   static navigationOptions = {
@@ -16,9 +21,14 @@ class Home extends Component {
   }
 
   render(){
-    console.log(this.props.data)
+    const { navigate } = this.props.navigation;
     return(
       <View style={styles.container}>
+        <View style= {{ marginBottom: 5 }}>
+        <Button
+          title = 'Add New User'
+          onPress= { () => navigate('AddUser')} />
+        </View>
         <FlatList
           data={this.props.data.user}
           keyExtractor = {(item, index) => index}
@@ -26,6 +36,8 @@ class Home extends Component {
             return (
               <View style = {{
                               marginBottom: 5,
+                              backgroundColor: 'lightgray',
+                              height: 50,
                               flexDirection: 'row'
                             }}
               >
