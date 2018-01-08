@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const cors      = require('cors');
 const app      = express();
 
-mongoose.connection.openUri('mongodb://127.0.0.1:27017', (err) => {
+mongoose.connection.openUri('mongodb://nahtanoy:132435@phase2-shard-00-00-fjtwn.mongodb.net:27017,phase2-shard-00-01-fjtwn.mongodb.net:27017,phase2-shard-00-02-fjtwn.mongodb.net:27017/test?ssl=true&replicaSet=PHASE2-shard-0&authSource=admin', (err) => {
   if (err) console.log('Database Not Connected');
   console.log('Database Connected');
 })

@@ -1,32 +1,52 @@
 const app = require('express')()
+const axios = require('axios')
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 const graphqlHTTP = require('express-graphql')
 const {
   GraphQLSchema,
   GraphQLObjectType,
   GraphQLInputObjectType,
   GraphQLString,
-  GraphQLList
+  GraphQLList,
+  GraphQLInt
 } = require('graphql');
 const logger = require('morgan');
 
-const schoolsData = [
-  {name: 'SMA Santa Maria 3', address: 'Cimahi'}
-]
+const MovieSchema = Schema ({
+  title: String,
+  overview: String,
+  poster_path: String,
+  status: String,
+  popularity: Number,
+  tag: [],
+})
 
-const SchoolType = new GraphQLObjectType({
-  name: 'School',
+const MoviesModel = mongoose.model('Movies', MovieSchema)
+
+const MoviesType = new GraphQLObjectType({
+  name: 'Movies',
   fields: {
-    name: {type: GraphQLString},
-    address: {type: GraphQLString}
+    _id: {type: GraphQLString},
+    title: {type: GraphQLString},
+    overview: {type: GraphQLString},
+    popularity: {type: GraphQLInt},
+    poster_path: {type: GraphQLString},
+    status: {type: GraphQLString}
   }
 })
 
 const AppQuery = new GraphQLObjectType({
   name: 'Hello',
   fields: {
-    schools: {
-      type: new GraphQLList(SchoolType),
-      resolve: () => schoolsData
+    movies: {
+      type: new GraphQLList(MoviesType),
+      resolve: () =>  {
+        MoviesModel.find().then(({data}) => {
+          console.log(data)
+          return data
+        })
+      }
     }
   }
 })
