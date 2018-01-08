@@ -1,7 +1,4 @@
 const Movie = require('../models/movies')
-const axios = require('axios')
-const redis = require('redis')
-const client = redis.createClient()
 
 const getAllMovies = (req, res) => {
   Movie.find()
@@ -13,13 +10,6 @@ const getAllMovies = (req, res) => {
   })
   .catch(err => {
     res.status(500).send(err)
-  })
-}
-
-const getAPIMovies = (req, res) => {
-  axios.get('http://localhost:3000/orchestra')
-  .then(data => {
-    client.setex('entertain', 30, JSON.stringify(data))
   })
 }
 
@@ -38,7 +28,6 @@ const postMovies = (req, res) => {
       status: "New Movie",
       newMovie
     })
-    getAPIMovies()
   })
   .catch(err => {
     res.status(500).send(err)
@@ -61,7 +50,6 @@ const updateMovie = (req, res) => {
       status: "updated",
       update
     })
-    getAPIMovies()
   })
   .catch(err => {
     res.status(500).send(err)
@@ -75,7 +63,6 @@ const removeMovie = (req, res) => {
         status: "Remove",
         remove
       })
-      getAPIMovies()
     })
     .catch(err => {
       res.status(500).send(err)
