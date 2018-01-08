@@ -1,23 +1,66 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { ApolloProvider } from 'react-apollo';
+import { ApolloClient } from 'apollo-client';
+import { HttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import gql from 'graphql-tag';
+// import { Provider } from 'react-redux'
+// import store from './store/store'
+import {
+  Text,
+  View
+} from 'react-native';
+import {
+  StackNavigator,
+} from 'react-navigation';
+import HomeScreen from './screen/Home'
+const query = gql`
+query{
+  user {
+    _id
+    name
+    address
+    age
+    createdAt
+  }
+}
+`;
+
+const Apps = StackNavigator({
+  Home: { screen: HomeScreen }
+});
+
+const client = new ApolloClient({
+  link: new HttpLink({ uri: 'http://192.168.0.166:4000/graphql' }),
+  cache: new InMemoryCache()
+});
 
 export default class App extends React.Component {
+  constructor(){
+    super()
+    this.state = {
+      users: []
+    }
+  }
+
+  // componentWillMount(){
+  //   client.query({ query: query })
+  //   .then(data => {
+  //     this.setState({
+  //       users: data.data.user
+  //     })
+  //     console.log(data.data)
+  //   })
+  //   .catch(err => {
+  //     console.log(err)
+  //   });
+  // }
+
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
-      </View>
+      <ApolloProvider client={client}>
+        <Apps />
+      </ApolloProvider>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
