@@ -108,6 +108,29 @@ const AppMutation = new GraphQLObjectType({
         return modelMovie.remove({_id :delParam._id})
         .then(data => modelMovie.find())
       }
+    },
+    editMovie:{
+      type : new GraphQLList(MovieType),
+      args:{
+        editParam:{
+          name:'MovieDeleteType',
+          type: MovieInputType
+        }
+      },
+      resolve : (root,args)=>{
+        const {editParam}= args
+        const id = editParam._id
+        return modelMovie.update({_id :editParam._id},{
+          title: editParam.title,
+          name: editParam.name,
+          overview: editParam.overview,
+          popularity: editParam.popularity,
+          poster_path: editParam.poster_path,
+          tag:editParam.tag,
+          status: editParam.status
+        })
+        .then(data => modelMovie.find())
+      }
     }
   }
 })
