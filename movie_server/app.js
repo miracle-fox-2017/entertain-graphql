@@ -111,12 +111,12 @@ const MutationType = new GraphQLObjectType({
 
 
         let newMovie = new movieModel({
-          title: input.overview,
-          overview: input.title,
+          title: input.title,
+          overview: input.overview,
         })
 
         await newMovie.save()
-        
+
         return newMovie;
       }
     },
@@ -138,7 +138,7 @@ const MutationType = new GraphQLObjectType({
         editMovie.title = input.title;
         editMovie.overview = input.overview;
 
-        const editedMovie = await editMovie.save() 
+        const editedMovie = await editMovie.save()
         return editedMovie
       }
     },
