@@ -34,6 +34,15 @@ const UserType = new GraphQLObjectType({
   }
 })
 
+const DataType = new GraphQLObjectType({
+  name: 'Data',
+  fields: {
+    data: {
+      type: UserType
+    }
+  }
+})
+
 const ActionType = new GraphQLObjectType({
   name: 'Action',
   fields: {
@@ -109,7 +118,8 @@ const MutationType = new GraphQLObjectType({
           const user = new User(newUser)
           const createUser = await user.save()
           return {
-            msg: 'success create User'
+            msg: 'success create User',
+            data: createUser
           }
         } catch (err) {
           console.log(err)
