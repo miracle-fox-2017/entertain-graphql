@@ -59,7 +59,7 @@ class HomeScreen extends Component {
       <View style={styles.container}>
         <FlatList
           data={this.state.movieList}
-          keyExtractor={(item, index) => 'movie-'+item.id}
+          keyExtractor={(item, index) => 'movie-'+index}
           renderItem={({item}) => {
             return(
               <TouchableOpacity onPress={() => navigate('Details', { movie: item })}>
