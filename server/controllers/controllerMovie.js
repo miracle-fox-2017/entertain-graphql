@@ -1,6 +1,9 @@
 const Movies = require('../models/modelMovie')
 
 const getDataMovie = (req, res) => {
+  console.log('====================================')
+  console.log('MINTA DATA MOVIES')
+  console.log('====================================')
   return new Promise((resolve, reject) => {
     Movies.find()
     .then((dataMovies) => {

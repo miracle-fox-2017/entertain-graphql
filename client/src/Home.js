@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
-import Dimensions from 'react-native'
+import React, { Component } from 'react'
 import { Container, Header, View, Button, Icon, Fab } from 'native-base'
-import { Screen, Image, Tile, Divider, ListView, Title, Subtitle } from "@shoutem/ui";
+import { Screen, Image, Tile, Divider, ListView, Title, Subtitle } from "@shoutem/ui"
+import { graphql } from "react-apollo"
+import gql from 'graphql-tag'
 
 
-export default class Home extends Component {
+class Home extends Component {
   constructor(props) {
     super(props);
     this.renderRow = this.renderRow.bind(this);
@@ -38,7 +39,11 @@ export default class Home extends Component {
     );
   }
   render() {
+    const { data } = this.props
     const { navigate } = this.props.navigation
+    console.log('====================================')
+    console.log(this.props, 'MOVIES')
+    console.log('====================================')
     return (
       <View style={{ flex: 1 }}>
       <Screen>
@@ -60,3 +65,26 @@ export default class Home extends Component {
     )
   }
 }
+
+const getAllData = gql`
+  query getAllData {
+    movies {
+      _id
+      title
+      overview
+      poster_path
+      popularity
+    }
+  }
+`
+const allexport = graphql(getAllData, {
+  // ownProps are the props that are passed into the `ProfileWithData`
+  // when it is used by a parent component
+  props: ({data: { loading, movies, refetch } }) => ({
+    loading: loading,
+    movies: movies,
+    refetchUser: refetch,
+  }),
+})(Home)
+
+export default allexport
