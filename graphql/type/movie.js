@@ -7,6 +7,7 @@ const {
 const MovieType = new GraphQLObjectType({
   name: 'Movie',
   fields: {
+    id: { type: GraphQLString },
     poster_path: { type: GraphQLString },
     overview: { type: GraphQLString },
     title: { type: GraphQLString },
@@ -17,6 +18,7 @@ const MovieType = new GraphQLObjectType({
 const MovieInputType = new GraphQLInputObjectType({
   name: 'MovieInput',
   fields: {
+    id: { type: GraphQLString },
     poster_path: { type: GraphQLString },
     overview: { type: GraphQLString },
     title: { type: GraphQLString },

@@ -36,6 +36,20 @@ const AppMutation = new GraphQLObjectType({
         return await Movie.find()
       },
     },
+    deleteMovie: {
+      type: new GraphQLList(MovieType),
+      args: {
+        movieParam: {
+          name: 'MovieParam',
+          type: MovieInputType
+        }
+      },
+      resolve: async (root, args) => {
+        const { movieParam } = args
+        await Movie.findByIdAndRemove(movieParam.id)
+        return await Movie.find()
+      },
+    },
   }
 })
 
