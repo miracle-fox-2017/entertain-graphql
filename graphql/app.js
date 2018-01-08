@@ -1,5 +1,4 @@
 const app = require('express')()
-const axios = require('axios')
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const graphqlHTTP = require('express-graphql')
@@ -9,9 +8,15 @@ const {
   GraphQLInputObjectType,
   GraphQLString,
   GraphQLList,
-  GraphQLInt
+  GraphQLInt,
+  GraphQLFloat
 } = require('graphql');
 const logger = require('morgan');
+
+mongoose.connection.openUri('mongodb://nahtanoy:132435@phase2-shard-00-00-fjtwn.mongodb.net:27017,phase2-shard-00-01-fjtwn.mongodb.net:27017,phase2-shard-00-02-fjtwn.mongodb.net:27017/test?ssl=true&replicaSet=PHASE2-shard-0&authSource=admin', (err) => {
+  if (err) console.log('Database Not Connected');
+  console.log('Database Connected');
+})
 
 const MovieSchema = Schema ({
   title: String,
@@ -19,7 +24,7 @@ const MovieSchema = Schema ({
   poster_path: String,
   status: String,
   popularity: Number,
-  tag: [],
+  tag: String,
 })
 
 const MoviesModel = mongoose.model('Movies', MovieSchema)
@@ -30,9 +35,30 @@ const MoviesType = new GraphQLObjectType({
     _id: {type: GraphQLString},
     title: {type: GraphQLString},
     overview: {type: GraphQLString},
-    popularity: {type: GraphQLInt},
+    popularity: {type: GraphQLFloat},
     poster_path: {type: GraphQLString},
-    status: {type: GraphQLString}
+    status: {type: GraphQLString},
+    tag: {type: GraphQLString}
+  }
+})
+
+const MovieInputType = new GraphQLInputObjectType({
+  name: 'MovieInput',
+  fields: {
+    title: {type: GraphQLString},
+    overview: {type: GraphQLString},
+    popularity: {type: GraphQLFloat},
+    poster_path: {type: GraphQLString},
+    status: {type: GraphQLString},
+    tag: {type: GraphQLString}
+  }
+})
+
+
+const MovieDeleteType = new GraphQLInputObjectType({
+  name: 'MovieDelete',
+  fields: {
+    _id: {type: GraphQLString}
   }
 })
 
@@ -42,17 +68,52 @@ const AppQuery = new GraphQLObjectType({
     movies: {
       type: new GraphQLList(MoviesType),
       resolve: () =>  {
-        MoviesModel.find().then(({data}) => {
-          console.log(data)
-          return data
-        })
+        return MoviesModel.find()
+      }
+    }
+  }
+})
+
+const AppMutation = new GraphQLObjectType({
+  name: 'appMutation',
+  fields: {
+    addMovie: {
+      type: new GraphQLList(MoviesType),
+      args: {
+        movieParam: {
+          name: 'movie params',
+          type: MovieInputType
+        }
+      },
+      resolve: async (root, args) => {
+        const {movieParam} = args
+        await MoviesModel.create(movieParam)
+        let movie = await MoviesModel.find()
+        return movie
+      }
+    },
+    deleteMovie: {
+      type: new GraphQLList(MoviesType),
+      args: {
+        removeMovie: {
+          name: 'removeMovie',
+          type: MovieDeleteType
+        }
+      },
+      resolve: async (root, args) => {
+        const {removeMovie} = args
+        const id = removeMovie._id
+        await MoviesModel.findByIdAndRemove(id)
+        let movies = await MoviesModel.find()
+        return movies
       }
     }
   }
 })
 
 const appSchema = new GraphQLSchema({
-  query: AppQuery
+  query: AppQuery,
+  mutation: AppMutation
 })
 
 app.use(logger('dev'));
