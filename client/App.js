@@ -15,6 +15,7 @@ import {
 } from 'react-navigation';
 import HomeScreen from './screen/Home'
 import AddUserScreen from './screen/AddUser'
+import DeleteUserScreen from './screen/DeleteUser'
 const query = gql`
 query{
   user {
@@ -29,7 +30,8 @@ query{
 
 const Apps = StackNavigator({
   Home: { screen: HomeScreen },
-  AddUser: { screen: AddUserScreen }
+  AddUser: { screen: AddUserScreen },
+  DeleteUser: { screen: DeleteUserScreen }
 });
 
 const client = new ApolloClient({
@@ -44,19 +46,6 @@ export default class App extends React.Component {
       users: []
     }
   }
-
-  // componentWillMount(){
-  //   client.query({ query: query })
-  //   .then(data => {
-  //     this.setState({
-  //       users: data.data.user
-  //     })
-  //     console.log(data.data)
-  //   })
-  //   .catch(err => {
-  //     console.log(err)
-  //   });
-  // }
 
   render() {
     return (

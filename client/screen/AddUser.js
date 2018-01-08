@@ -30,8 +30,10 @@ class AddUser extends Component {
     try {
       const {name, address, age} = this.state
       await this.props.mutate({variables: {name, address, age}})
+      alert('success add')
     } catch (err) {
       console.log(err)
+      alert('cannot add user')
     }
   }
 

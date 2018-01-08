@@ -25,9 +25,9 @@ class Home extends Component {
     return(
       <View style={styles.container}>
         <View style= {{ marginBottom: 5 }}>
-        <Button
-          title = 'Add New User'
-          onPress= { () => navigate('AddUser')} />
+          <Button
+            title = 'Add New User'
+            onPress= { () => navigate('AddUser')} />
         </View>
         <FlatList
           data={this.props.data.user}
@@ -44,6 +44,11 @@ class Home extends Component {
                 <Text style={{ paddingLeft: 2 }}>{item.name}</Text>
                 <Text style={{ paddingLeft: 2 }}>{item.address}</Text>
                 <Text style={{ paddingLeft: 2 }}>{item.age}</Text>
+                <View>
+                  <Button
+                    title = 'Delete'
+                    onPress= { () => navigate('DeleteUser', {id: item._id})} />
+                </View>
               </View>
             )}
           }
