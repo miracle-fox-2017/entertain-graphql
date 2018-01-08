@@ -1,14 +1,32 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { StackNavigator } from 'react-navigation'
+import { Provider } from 'react-redux'
+import { ApolloProvider } from 'react-apollo';
+import { ApolloClient } from 'apollo-client';
+import { HttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import gql from 'graphql-tag'
+
+import HomeScreen from './screens/Home'
+
+const client = new ApolloClient({
+  link: new HttpLink({ uri: 'http://192.168.42.210:4000/graphql' }),
+  cache: new InMemoryCache()
+});
+
+const AppNavigator = StackNavigator({
+  home: {
+    screen: HomeScreen
+  }
+})
 
 export default class App extends React.Component {
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
-      </View>
+      <ApolloProvider client={client}>
+        <AppNavigator/>
+      </ApolloProvider>
     );
   }
 }
