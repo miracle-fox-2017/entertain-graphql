@@ -1,0 +1,14 @@
+{
+  "name": "entertain-graphql",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/AhmadNizar/entertain-graphql.git",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.2",
+    "express-graphql": "^0.6.11",
+    "graphql": "^0.12.3",
+    "mongoose": "^4.13.9",
+    "nodemon": "^1.14.9"
+  }
+}
