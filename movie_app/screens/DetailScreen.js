@@ -56,7 +56,6 @@ class DetailScreen extends Component {
 
     return (
       <View style={styles.movieItem}>
-        <Text>{JSON.stringify(this.props)}</Text>
         <Text style={styles.title}>{this.state.movie.title}</Text>
         <Text>{this.state.movie.overview}</Text>
         <Button title="Delete" onPress={() => this.deleteItem()} />
