@@ -7,11 +7,28 @@ const {
   GraphQLString,
   GraphQLInt,
   GraphQLList,
+  GraphQLInputObjectType,
   GraphQLObjectType
 } = require('graphql')
+app.use(morgan('dev'))
 
 const UserType = new GraphQLObjectType({
   name: 'User',
+  fields: {
+    name: {
+      type: GraphQLString
+    },
+    address: {
+      type: GraphQLString
+    },
+    age: {
+      type: GraphQLInt
+    }
+  }
+})
+
+const UserInputType = new GraphQLInputObjectType({
+  name: 'UserInputType',
   fields: {
     name: {
       type: GraphQLString
@@ -31,17 +48,38 @@ const QueryType = new GraphQLObjectType({
     user: {
       type: new GraphQLList(UserType),
       resolve: () => {
-        return [{name: 'capung', address: 'jakarta', age: 99}, {name: 'capung', address: 'jakarta', age: 99}]
+        return [
+          {name: 'capung', address: 'jakarta', age: 99},
+          {name: 'capung', address: 'jakarta', age: 99}
+        ]
+      }
+    }
+  }
+})
+
+const MutationType = new GraphQLObjectType({
+  name: 'Mutation',
+  fields: {
+    createUser: {
+      type: new GraphQLList(UserType),
+      args: {
+        input: {
+          name: 'input',
+          type: UserInputType
+        }
+      },
+      resolve: (root, args) => {
+        console.log(args.input)
+        return [args.input]
       }
     }
   }
 })
 
 const appSchema = new GraphQLSchema({
-  query: QueryType
+  query: QueryType,
+  mutation: MutationType
 })
-
-app.use(morgan('dev'))
 
 app.use('/graphql', graphqlHTTP({
   schema: appSchema,
@@ -53,3 +91,27 @@ app.use('/', (req, res) => {
 })
 
 app.listen(4000, () => console.log('server running on 4000'))
+
+
+// queryQL mutation createUser
+// mutation{
+//   createUser(input: {
+//     name: "belalang",
+//     address: "jakarta",
+//     age: 20
+//   })
+//   {
+//     name
+//     address
+//     age
+//   }
+// }
+
+// queryQL query
+// query{
+//   user {
+//     name
+//     address
+//     age
+//   }
+// }
