@@ -10,11 +10,15 @@ const {
   GraphQLInputObjectType,
   GraphQLObjectType
 } = require('graphql')
+const User = require('./models/User');
 app.use(morgan('dev'))
 
 const UserType = new GraphQLObjectType({
   name: 'User',
   fields: {
+    _id: {
+      type: GraphQLString
+    },
     name: {
       type: GraphQLString
     },
@@ -23,13 +27,43 @@ const UserType = new GraphQLObjectType({
     },
     age: {
       type: GraphQLInt
+    },
+    createdAt: {
+      type: GraphQLString
+    },
+  }
+})
+
+const ActionType = new GraphQLObjectType({
+  name: 'Action',
+  fields: {
+    msg: {
+      type: GraphQLString
+    },
+    err: {
+      type: GraphQLString
+    },
+    data: {
+      type: GraphQLString
     }
+  }
+})
+
+const UserIdInputType = new GraphQLInputObjectType({
+  name: 'UserId',
+  fields: {
+    _id: {
+      type: GraphQLString
+    },
   }
 })
 
 const UserInputType = new GraphQLInputObjectType({
   name: 'UserInputType',
   fields: {
+    _id: {
+      type: GraphQLString
+    },
     name: {
       type: GraphQLString
     },
@@ -47,13 +81,10 @@ const QueryType = new GraphQLObjectType({
   fields: {
     user: {
       type: new GraphQLList(UserType),
-      resolve: () => {
-        return [
-          {name: 'capung', address: 'jakarta', age: 99},
-          {name: 'capung', address: 'jakarta', age: 99}
-        ]
+      resolve: async () => {
+        return await User.find()
       }
-    }
+    },
   }
 })
 
@@ -61,16 +92,83 @@ const MutationType = new GraphQLObjectType({
   name: 'Mutation',
   fields: {
     createUser: {
-      type: new GraphQLList(UserType),
+      type: ActionType,
       args: {
         input: {
           name: 'input',
           type: UserInputType
         }
       },
-      resolve: (root, args) => {
-        console.log(args.input)
-        return [args.input]
+      resolve: async (root, args) => {
+        try {
+          const newUser = {
+            name: args.input.name,
+            address: args.input.address,
+            age: args.input.age
+          }
+          const user = new User(newUser)
+          const createUser = await user.save()
+          return {
+            msg: 'success create User'
+          }
+        } catch (err) {
+          console.log(err)
+          return {
+            msg: 'cannot create User',
+            err: err
+          }
+        }
+      }
+    },
+    deleteUser: {
+      type: ActionType,
+      args: {
+        input: {
+          name: 'inputId',
+          type: UserIdInputType
+        }
+      },
+      resolve: async (root, args) => {
+        try {
+          console.log(args)
+          await User.remove({ _id: args.input._id })
+          return {
+            msg: 'delete success id ' + args.input._id
+          }
+        } catch (err) {
+          return {
+            msg: 'cannot delete User ' + args.input._id,
+            err: err
+          }
+        }
+      }
+    },
+    editUser: {
+      type: ActionType,
+      args: {
+        input: {
+          name: 'editUser',
+          type: UserInputType
+        }
+      },
+      resolve: async (root, args) => {
+        try {
+          console.log(args)
+          const newUser = {
+            name: args.input.name,
+            address: args.input.address,
+            age: args.input.age
+          }
+          await User.update({ _id: args.input._id }, newUser)
+          return {
+            msg: 'update success id ' + args.input._id
+          }
+        } catch (err) {
+          return {
+            msg: 'cannot update User ' + args.input._id,
+            err: err
+          }
+        }
       }
     }
   }
@@ -96,14 +194,13 @@ app.listen(4000, () => console.log('server running on 4000'))
 // queryQL mutation createUser
 // mutation{
 //   createUser(input: {
-//     name: "belalang",
+//     name: "semut",
 //     address: "jakarta",
 //     age: 20
 //   })
 //   {
-//     name
-//     address
-//     age
+//     msg
+//     err
 //   }
 // }
 
@@ -113,5 +210,30 @@ app.listen(4000, () => console.log('server running on 4000'))
 //     name
 //     address
 //     age
+//   }
+// }
+
+//queryQL mutation editUser
+// mutation{
+//   editUser(input: {
+//     _id: "5a53019fbe51e55777834bf9",
+//     name: "lebah ganteng",
+//     address: "jakarta",
+//     age: 20
+//   })
+//   {
+//     msg
+//     err
+//   }
+// }
+
+//queryQL mutation deleteUser
+// mutation{
+//   deleteUser(input: {
+//     _id: "5a5301e94ee7ff57d97f2d49"
+//   })
+//   {
+//     msg
+//     err
 //   }
 // }
