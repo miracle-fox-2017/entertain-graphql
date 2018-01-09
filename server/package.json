@@ -1,0 +1,28 @@
+{
+  "name": "entertain-graphql",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/miracle-fox-2017/entertain-graphql.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/miracle-fox-2017/entertain-graphql/issues"
+  },
+  "homepage": "https://github.com/miracle-fox-2017/entertain-graphql#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "express-graphql": "^0.6.11",
+    "graphql": "^0.12.3",
+    "mongoose": "^4.13.9",
+    "morgan": "^1.9.0"
+  }
+}
