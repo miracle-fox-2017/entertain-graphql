@@ -17,11 +17,11 @@ class DetailScreen extends Component {
     }
   }
   
-  deleteItem() {
-    alert("Delete Me!")
-    const movieId = this.state.movie.id
-    this.props.mutate({ variables: { movieId } })
+  deleteItem = async (movieId) => {
+    alert(`DELETE Movie ${movieId}`)
 
+    await this.props.mutate({ variables: { id: movieId } })
+    
     const { navigate } = this.props.navigation;
     // navigate('Home')
     this.props.navigation.dispatch(NavigationActions.back())
@@ -37,6 +37,9 @@ class DetailScreen extends Component {
   }
   
   render() {
+    const { navigate, state } = this.props.navigation
+    const movie = state.params.movie;
+
     const styles = StyleSheet.create({
       movieItem: {
         backgroundColor: '#fff',
@@ -58,34 +61,22 @@ class DetailScreen extends Component {
       <View style={styles.movieItem}>
         <Text style={styles.title}>{this.state.movie.title}</Text>
         <Text>{this.state.movie.overview}</Text>
-        <Button title="Delete" onPress={() => this.deleteItem()} />
+        <Button title="Delete" onPress={() => this.deleteItem(movie._id)} />
       </View>
     )
   }
 }
 
-
-
-/* export default graphql(gql`
-  mutation{
+const deleteMovie = gql`
+  mutation deleteMovie($id: String){
     deleteMovie(input:{
       id: $id
     })
-  }`,
-  {
-    options: (props) => ({
-      variables: {
-        id: props.id,
-      },
-    })
-  }
-)(DetailScreen); */
-
-const deleteMovieMutation = gql`
-  mutation deleteMovie($id: String!) {
-    deleteMovie(input:{
-      id: $id
-    })
+    {
+      _id
+      title
+      overview
+    }
   }`
 
-export default graphql(deleteMovieMutation)(DetailScreen)
+export default graphql(deleteMovie)(DetailScreen)

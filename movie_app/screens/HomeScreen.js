@@ -55,6 +55,8 @@ class HomeScreen extends Component {
       },
     }); 
 
+    console.log(`===========RENDER HOME!!`)
+
     return (
       <View style={styles.container}>
         <FlatList
