@@ -20,6 +20,7 @@ import { ApolloProvider } from 'react-apollo';
 
 import ListBook from './src/components/ListBook'
 import AddBook from './src/components/AddBook'
+import EditBook from './src/components/EditBook'
 
 const client = new ApolloClient({
   link: new HttpLink({uri: `http://192.168.56.1:3001/graphql`}),
@@ -30,7 +31,8 @@ export default class App extends Component<{}> {
   render() {
     const Navigasi = StackNavigator({
       ListBook: {screen: ListBook},
-      AddBook: {screen: AddBook}
+      AddBook: {screen: AddBook},
+      EditBook: {screen: EditBook}
     })
     return (
       <ApolloProvider client={client}>

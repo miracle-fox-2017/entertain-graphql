@@ -10,12 +10,24 @@ import {
 import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import AddBook from './AddBook'
+import EditBook from './EditBook'
 
 class ListBook extends Component {
 
-  componentDidMount() {
+  constructor() {
+    super()
+    this.state = {
+      counter: 0,
+      books: []
+    }
+  }
+
+  componentWillMount() {
     const {refetch} = this.props.data
     refetch()
+    this.setState({
+      books: this.props.data.books
+    })
   }
 
   deleteBook(book) {
@@ -24,7 +36,7 @@ class ListBook extends Component {
       variables: { id: book }
     })
       .then(({ data }) => {
-        console.log('got data', data);
+        this.props.data.refetch()
       }).catch((error) => {
         console.log('there was an error sending the query', error);
       });
@@ -63,6 +75,10 @@ class ListBook extends Component {
                   onPress={() => this.deleteBook(book._id)}
                   title="delete"
                 />
+                <Button
+                  onPress={() => {navigate('EditBook', {book: book})}}
+                  title="Edit"
+                />                 
               </View>
             ))}
           </List>
