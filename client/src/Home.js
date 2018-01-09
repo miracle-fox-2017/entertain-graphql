@@ -1,11 +1,15 @@
 import React, { Component } from 'react'
-import { Container, Header, View, Button, Icon, Fab } from 'native-base'
-import { Screen, Image, Tile, Divider, ListView, Title, Subtitle } from "@shoutem/ui"
+import { Container, Header, View, Button, Icon, Fab, Spinner } from 'native-base'
+import { NavigationBar, Screen, Image, Tile, Divider, ListView, Title, Subtitle } from "@shoutem/ui"
+import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader'
 import { graphql } from "react-apollo"
 import gql from 'graphql-tag'
 
 
 class Home extends Component {
+  static navigationOptions = {
+    header: null
+  }
   constructor(props) {
     super(props);
     this.renderRow = this.renderRow.bind(this);
@@ -22,16 +26,19 @@ class Home extends Component {
       }],
     }
   }
-  renderRow(restaurant) {
+  renderRow(movie) {
+    console.log('====================================')
+    console.log(movie.poster_path)
+    console.log('====================================')
     return (
       <View>
         <Image
           styleName="large-banner"
-          source={{ uri: restaurant.image.url }}
+          source={{ uri: movie.poster_path }}
         >
           <Tile>
-            <Title styleName="md-gutter-bottom">{restaurant.name}</Title>
-            <Subtitle styleName="sm-gutter-horizontal">{restaurant.address}</Subtitle>
+            <Title styleName="md-gutter-bottom">{movie.title}</Title>
+            <Subtitle styleName="sm-gutter-horizontal">{movie.popularity}</Subtitle>
           </Tile>
         </Image>
         <Divider styleName="line" />
@@ -39,26 +46,31 @@ class Home extends Component {
     );
   }
   render() {
-    const { data } = this.props
-    const { navigate } = this.props.navigation
-    console.log('====================================')
-    console.log(this.props, 'MOVIES')
-    console.log('====================================')
+    const { data: { movies }, navigation : { navigate } } = this.props
+    let showMovies = null
+    if(!movies){
+      showMovies = <View style={{ flex: 1,  justifyContent: 'center', alignItems: 'center'}}><Bubbles color='blue'/></View>
+    } else {
+      console.log('====================================')
+      console.log(movies)
+      console.log('====================================')
+      showMovies = <ListView
+        data={movies}
+        renderRow={this.renderRow}
+      />
+    }
     return (
       <View style={{ flex: 1 }}>
-      <Screen>
-        <ListView
-          data={this.state.restaurants}
-          renderRow={this.renderRow}
-        />
-      </Screen>
+        <Screen>
+          { showMovies }
+        </Screen>
         <Fab
           active={this.state.active}
           direction="up"
           containerStyle={{ }}
           style={{ backgroundColor: '#5067FF' }}
           position="bottomRight"
-          onPress={() => this.setState({ active: !this.state.active })}>
+          onPress={() => navigate('Input')}>
           <Icon name="add" />
         </Fab>
       </View>
@@ -67,7 +79,7 @@ class Home extends Component {
 }
 
 const getAllData = gql`
-  query getAllData {
+  query {
     movies {
       _id
       title
@@ -77,14 +89,6 @@ const getAllData = gql`
     }
   }
 `
-const allexport = graphql(getAllData, {
-  // ownProps are the props that are passed into the `ProfileWithData`
-  // when it is used by a parent component
-  props: ({data: { loading, movies, refetch } }) => ({
-    loading: loading,
-    movies: movies,
-    refetchUser: refetch,
-  }),
-})(Home)
+const allexport = graphql(getAllData)(Home)
 
 export default allexport

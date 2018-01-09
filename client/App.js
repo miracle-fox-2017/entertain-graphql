@@ -9,7 +9,7 @@ import Edit from './src/Edit'
 import Input from './src/Input'
 
 const client = new ApolloClient({
-  link: new HttpLink({ uri: 'http://localhost:3000/graphql'}),
+  link: new HttpLink({ uri: 'http://192.168.1.102:3000/graphql'}),
   cache: new InMemoryCache()
 })
 
