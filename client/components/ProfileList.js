@@ -14,7 +14,19 @@ class ProfileList extends React.Component {
     }
   }
 
-  addData() {
+  addData = async () => {
+    try {
+      const { firstName, lastName, address } = this.state
+      await this.props.addProfile({
+        variables: {
+          firstName,
+          lastName,
+          address
+        }
+      })
+    } catch (error) {
+      console.log(error)
+    }
 
   }
 
@@ -71,7 +83,7 @@ const styles = StyleSheet.create({
   textInput: {
     width: 300
   },
-  btn:{
+  btn: {
     width: 150,
     flex: 1,
     flexDirection: 'row'
@@ -86,4 +98,18 @@ query{
     address,
     _id
   }
-}`)(ProfileList)
+}`)
+  (graphql(gpl`
+mutation addProfile($firstName: String, $lastName: String, $address: String){
+  addProfile(
+    firstName: $firstName,
+    lastName: $lastName,
+    address: $address)
+    {
+    firstName
+    lastName
+    address
+    _id
+  }
+}
+  `, { name: 'addProfile' })(ProfileList))

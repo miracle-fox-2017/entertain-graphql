@@ -91,10 +91,15 @@ const graphMutation = new GraphQLObjectType({
         }
       },
       resolve: async (root, args) => {
-        const { profileParams } = args
-        await Profile.create(profileParams)
-        let dataProfile = await Profile.find()
-        return dataProfile
+        try {
+          const { profileParams } = args
+          await Profile.create(profileParamss)
+          let dataProfile = await Profile.find()
+          return dataProfile
+        } catch (error) {
+          console.log(error)
+        }
+       
       }
     },
     deleteProfile: {
@@ -106,6 +111,7 @@ const graphMutation = new GraphQLObjectType({
         }
       },
       resolve: async (root, args) => {
+
         const { idProfileParams } = args
         const id = idProfileParams.id
         await Profile.findByIdAndRemove(id)
@@ -122,14 +128,19 @@ const graphMutation = new GraphQLObjectType({
         }
       },
       resolve: async (root, args) => {
-        const { profileParams } = args
-        await Profile.update({ _id: profileParams.id }, {
-          address: profileParams.address,
-          firstName: profileParams.firstName,
-          lastName: profileParams.lastName
-        })
-        let dataProfile = await Profile.find()
-        return dataProfile
+        try {
+          const { profileParams } = args
+          await Profile.update({ _id: profileParams.id }, {
+            address: profileParams.address,
+            firstName: profileParams.firstName,
+            lastName: profileParams.lastName
+          })
+          let dataProfile = await Profile.find()
+          return dataProfile
+        } catch (error) {
+          console.log(error)
+        }
+       
       }
     }
   }
