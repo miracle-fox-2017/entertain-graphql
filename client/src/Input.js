@@ -19,11 +19,30 @@ class Input extends Component {
       poster_path: ''
     }
   }
-  saveMovie () {
-
+  saveMovie = () => {
+    let { title, overview, popularity, poster_path } = this.state
+    let obj = {
+      title: title,
+      overview: overview,
+      popularity: popularity,
+      poster_path: poster_path
+    }
+    console.log('====================================')
+    console.log(this.props)
+    console.log('====================================')
+    this.props.mutate({variables: obj })
+    .then( () => {
+      this.props.navigation.navigate('Home')
+    })
+    .catch(err => {
+      console.log('====================================')
+      console.log(err)
+      console.log('====================================')
+    })
+    
   }
   render() {
-    const { goBack } = this.props.navigation;
+    const { navigation: { goBack } } = this.props;
     return (
       <View style={styles.container}>
         <Text style={{padding:10}}></Text>
@@ -66,11 +85,20 @@ class Input extends Component {
   }
 }
 
+// define your styles
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#00BEF7',
+    paddingTop: 30,
+    padding: 15
+  },
+});
+
+//make this component available to the app
 const saveData = gql`
-  mutation {
-    addMovie(movieParam: {title: '', overview: '', poster_path: '', popularity: ''})
+  mutation addMovie($title: String, $overview: String, $poster_path: String, $popularity: String){
+    addMovie(movieParam: {title: $title , overview: $overview, poster_path: $poster_path, popularity: $popularity})
   }
 `
-const allexport = graphql(saveData)(Input)
-
-export default allexport
+export default graphql(saveData)(Input)
