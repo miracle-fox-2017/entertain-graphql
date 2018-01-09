@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import HomeScreen from './screens/HomeScreen'
 import DetailScreen from './screens/DetailScreen'
+import AddMovieScreen from './screens/AddMovieScreen'
 import { ApolloProvider } from 'react-apollo';
 import { ApolloClient } from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
@@ -21,6 +22,9 @@ const MainApp = StackNavigator({
   },
   Details: {
     screen: DetailScreen
+  },
+  AddMovie: {
+    screen: AddMovieScreen
   },
 })
 

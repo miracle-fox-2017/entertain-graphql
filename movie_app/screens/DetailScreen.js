@@ -23,7 +23,6 @@ class DetailScreen extends Component {
     await this.props.mutate({ variables: { id: movieId } })
     
     const { navigate } = this.props.navigation;
-    // navigate('Home')
     this.props.navigation.dispatch(NavigationActions.back())
   }
 

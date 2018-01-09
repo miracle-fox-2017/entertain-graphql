@@ -56,9 +56,10 @@ class HomeScreen extends Component {
     }); 
 
     console.log(`===========RENDER HOME!!`)
-
+   
     return (
       <View style={styles.container}>
+        <Button title="New Movie" onPress={() => navigate('AddMovie', { type: 'newMovie' })}/>
         <FlatList
           data={this.state.movieList}
           keyExtractor={(item, index) => 'movie-'+index}
