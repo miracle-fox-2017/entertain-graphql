@@ -8,7 +8,7 @@ const {
   mutation
 } = require('./graphqlSchema');
 
-mongoose.connect('mongodb://tomybudiman:400378@ecommerce-shard-00-00-l8lyw.mongodb.net:27017,ecommerce-shard-00-01-l8lyw.mongodb.net:27017,ecommerce-shard-00-02-l8lyw.mongodb.net:27017/movies?ssl=true&replicaSet=ecommerce-shard-0&authSource=admin',{
+mongoose.connect('mongodb://127.0.0.1:27017/movie',{
   useMongoClient : true
 });
 

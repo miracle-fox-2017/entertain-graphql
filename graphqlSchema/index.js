@@ -2,12 +2,14 @@ const {
   GraphQLObjectType,
   GraphQLList
 } = require('graphql');
+const ObjectId = require('mongoose').Types.ObjectId;
 
 const Movie = require('../model/modelMovie');
 
 const {
   movieType,
-  movieInput
+  movieCreateInput,
+  movieDelete
 } = require('./movie');
 
 const query = new GraphQLObjectType({
@@ -31,7 +33,7 @@ const mutation = new GraphQLObjectType({
       args : {
         movieParam : {
           name : 'MovieParam',
-          type : movieInput
+          type : movieCreateInput
         }
       },
       resolve : async (root,args) => {
@@ -43,8 +45,23 @@ const mutation = new GraphQLObjectType({
           popularity : movieParam.popularity,
           tag : movieParam.tag
         }).save();
-        const movies = await Movie.find()
-        return movies
+        return await Movie.find()
+      }
+    },
+    deleteMovie : {
+      type : new GraphQLList(movieType),
+      args : {
+        deleteParam : {
+          name : 'DeleteParam',
+          type : movieDelete
+        }
+      },
+      resolve : async (root,args) => {
+        const {deleteParam} = args;
+        await Movie.deleteOne({
+          _id : ObjectId(deleteParam.id)
+        });
+        return await Movie.find()
       }
     }
   }

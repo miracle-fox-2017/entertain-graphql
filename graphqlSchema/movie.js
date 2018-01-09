@@ -9,6 +9,7 @@ const {
 const movieType = new GraphQLObjectType({
   name : 'Movie',
   fields : {
+    id : {type : GraphQLString},
     title : {type : GraphQLString},
     overview : {type : GraphQLString},
     posterPath : {type : GraphQLString},
@@ -17,8 +18,8 @@ const movieType = new GraphQLObjectType({
   }
 });
 
-const movieInput = new GraphQLInputObjectType({
-  name : 'MovieInput',
+const movieCreateInput = new GraphQLInputObjectType({
+  name : 'movieCreateInput',
   fields : {
     title : {type : GraphQLString},
     overview : {type : GraphQLString},
@@ -28,7 +29,15 @@ const movieInput = new GraphQLInputObjectType({
   }
 });
 
+const movieDelete = new GraphQLInputObjectType({
+  name : 'movieDelete',
+  fields : {
+    id : {type : GraphQLString}
+  }
+})
+
 module.exports = {
   movieType,
-  movieInput
+  movieCreateInput,
+  movieDelete
 };
