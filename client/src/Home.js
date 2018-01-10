@@ -14,16 +14,7 @@ class Home extends Component {
     super(props);
     this.renderRow = this.renderRow.bind(this);
     this.state = {
-      active: 'true',
-      restaurants: [{
-        'name': 'Gaspar Brasserie',
-        'address': '185 Sutter St, San Francisco, CA 94109',
-        'image': { 'url': 'https://shoutem.github.io/static/getting-started/restaurant-1.jpg' },
-      }, {
-        'name': 'Chalk Point Kitchen',
-        'address': '527 Broome St, New York, NY 10013',
-        'image': { 'url': 'https://shoutem.github.io/static/getting-started/restaurant-2.jpg' },
-      }],
+      active: 'true'
     }
   }
   renderRow(movie) {
@@ -43,7 +34,7 @@ class Home extends Component {
     );
   }
   render() {
-    const { data: { movies, error }, navigation : { navigate } } = this.props
+    const { data: { movies }, navigation : { navigate } } = this.props
     let showMovies = null
     if(!movies){
       showMovies = <View style={{ flex: 1,  justifyContent: 'center', alignItems: 'center'}}><Bubbles color='blue'/></View>
@@ -57,7 +48,6 @@ class Home extends Component {
     return (
       <View style={{ flex: 1 }}>
         <Screen>
-          {error && error.message}
           { showMovies }
         </Screen>
         <Fab
