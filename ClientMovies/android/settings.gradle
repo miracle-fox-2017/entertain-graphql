@@ -1,0 +1,3 @@
+rootProject.name = 'ClientMovies'
+
+include ':app'
