@@ -1,0 +1,59 @@
+# query {
+#   movies {
+#     _id,
+#     title,
+#     overview,
+#     poster_path,
+#     popularity,
+#     status,
+#     tag
+#   }   
+# }
+
+# mutation {
+#   createMovie(input: {
+#     title: "DAAAA",
+#     overview: "CAAA",
+#     poster_path: "KAKAKA",
+#     popularity: 8,
+#     status:"LOLOLO",
+#     tag: "HOROR"
+#   })
+#   {
+#     title
+#     overview
+#     poster_path
+#     popularity
+#     status
+#     tag
+#   }
+# }
+
+# mutation{
+#   deleteMovie(hapus: {
+#     _id: "5a5388b9771b717979f66175"
+#   })
+#   {
+#     _id
+#   }
+# }
+
+# mutation{
+#   editMovie(edit: {
+#     _id: "5a537c6574da9066db2600b5",
+#     title: "HU UH",
+#     overview: "LALALALA",
+#     poster_path: "KAKAKA",
+#     popularity: 8,
+#     status:"LOLOLO",
+#     tag: "HOROR"
+#   })
+#   {
+#     title
+#     overview
+#     poster_path
+#     popularity
+#     status
+#     tag
+#   }
+# }
